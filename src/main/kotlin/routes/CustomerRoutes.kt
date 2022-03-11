@@ -8,6 +8,11 @@ import io.ktor.routing.*
 import models.Customer
 import models.customerStorage
 
+fun Application.registerCustomerRoutes() {
+    routing {
+        customerRouting()
+    }
+}
 
 fun Route.customerRouting() {
     route("/customer") {
@@ -36,6 +41,7 @@ fun Route.customerRouting() {
             customerStorage.add(customer)
             call.respondText("Customer stored correctly", status = HttpStatusCode.Created)
         }
+
         delete("{id}") {
             val id = call.parameters["id"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
             if (customerStorage.removeIf { it.id == id }) {
